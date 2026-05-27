@@ -94,6 +94,19 @@ const createGroup = async (req, res) => {
             balances: [],
             total: 0
         });
+
+        // Initialize balances between all members
+        for (let i = 0; i < mem.length; i++) {
+            for (let j = 0; j < mem.length; j++) {
+                if (i !== j) {
+                    mem[i].balances.push({
+                        upi: mem[j].upi,
+                        name: mem[j].name,
+                        amount: 0
+                    });
+                }
+            }
+        }
         
         const group = new groupModel({
             name: name,
@@ -111,7 +124,7 @@ const createGroup = async (req, res) => {
         }
         
         // Update creator
-        await userModel.findByIdAndUpdate(user._id, { $push: { groups: response._id } });
+        await userModel.findOneAndUpdate({ upi: user.upi }, { $push: { groups: response._id } });
         
         // Update other members
         for (let member of members) {
@@ -126,6 +139,7 @@ const createGroup = async (req, res) => {
             message: "Group created successfully",
             code: response.code
         });
+
 
     } catch (error) {
         return res.json({
@@ -202,7 +216,7 @@ const addMember = async (req, res) => {
         await groupData.save();
 
         // Add the group's _id to the added user's groups reference list
-        await userModel.findByIdAndUpdate(memData._id, { $addToSet: { groups: groupData._id } });
+        await userModel.findOneAndUpdate({ upi: memData.upi }, { $push: { groups: groupData._id } });
 
         return res.json({
             status: true,

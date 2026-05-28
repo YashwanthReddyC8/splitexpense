@@ -183,7 +183,7 @@
   "name": "User One",
   "groups": [
     {
-      "code": "GRP001",
+      "code": "123456",
       "name": "Friends Group"
     }
   ],
@@ -231,7 +231,7 @@
 ```
 
 ### Get User Groups
-**Endpoint:** `GET /groups`
+**Endpoint:** `GET /group/getall`
 **Headers:**
 ```Authorization: Bearer <jwt_token>```
 **Response:**
@@ -239,8 +239,12 @@
 {
   "groups": [
     {
-      "code": "GRP001",
-      "name": "Friends Group"
+      "name": "Friends Group",
+      "createdBy": "Name",
+      "receiveableamount": 150.00,
+      "payableamount": 50.00,
+      "totalMembers": 5,
+      "groupCode": "123456"
     }
   ],
   "status": true
@@ -288,7 +292,7 @@
 ```json
 {
   "message": "Group created successfully",
-  "code": "GRP001",
+  "code": "123456",
   "status": true
 }
 ```
@@ -300,7 +304,7 @@
 **Response:**
 ```json
 {
-  "code": "GRP001",
+  "code": "000001",
   "name": "Friends Group",
   "members": [
     {"upi": "user1@upi", "amount": 300},
@@ -319,11 +323,8 @@
 **Request Body:**
 ```json
 {
-  "groupId": "GRP001",
-  "newMember": [
-    { "upi": "user4@upi", "name": "User Four"},
-    { "upi": "user5@upi", "name": "User Five"}
-  ]
+  "groupId": "000001",
+  "newMember": { "upi": "user4@upi", "name": "User Four"}
 }
 ```
 **Response:**
@@ -341,31 +342,6 @@
 }
 ```
 
-### Remove a member from the group (Only if the member has zero balance)
-**Endpoint:** `DELETE /group/member`
-**Headers:**
-```Authorization: Bearer <jwt_token>```
-**Request Body:**
-```json
-{
-  "groupId": "GRP001",
-  "memberToRemove": "user2@upi"
-}
-```
-**Response:**
-```json
-{
-  "message": "Member removed successfully",
-  "members": [
-    {"upi": "user1@upi", "amount": 300},
-    { "upi": "user3@upi", "amount": 200},
-    { "upi": "user4@upi", "amount": 0},
-    { "upi": "user5@upi", "amount": 0}
-  ],
-  "status": true
-}
-```
-
 ### Join a Group
 **Endpoint:** `POST /group/join`
 **Headers:**
@@ -373,7 +349,7 @@
 **Request Body:**
 ```json
 {
-  "groupId": "GRP001"
+  "groupId": "000001"
 }
 ```
 **Response:**```json
@@ -390,28 +366,11 @@
 **Request Body:**
 ```json
 {
-  "groupId": "GRP001"
+  "groupId": "000000"
 }
 ```
 **Response:**
 ```json
-{
-  "message": "Left group successfully",
-  "status": true
-}
-```
-
-### Leave a Group (Only if the member has zero balance)
-**Endpoint:** `POST /group/leave`
-**Headers:**
-```Authorization: Bearer <jwt_token>```
-**Request Body:**
-```json
-{
-  "groupId": "GRP001"
-}
-```
-**Response:**```json
 {
   "message": "Left group successfully",
   "status": true
@@ -427,7 +386,7 @@
 **Request Body:**
 ```json
 {
-  "groupId": "GRP001",
+  "groupId": "000001",
   "amount": 300,
   "desc": "Dinner",
   "splits": [
@@ -594,4 +553,49 @@
 /txn/balance/:groupId
 /txn/settle
 /txn/revert
+```
+
+
+## Future Scopes
+
+### Remove a member from the group (Only if the member has zero balance)
+**Endpoint:** `DELETE /group/member`
+**Headers:**
+```Authorization: Bearer <jwt_token>```
+**Request Body:**
+```json
+{
+  "groupId": "000001",
+  "memberToRemove": "user2@upi"
+}
+```
+**Response:**
+```json
+{
+  "message": "Member removed successfully",
+  "members": [
+    {"upi": "user1@upi", "amount": 300},
+    { "upi": "user3@upi", "amount": 200},
+    { "upi": "user4@upi", "amount": 0},
+    { "upi": "user5@upi", "amount": 0}
+  ],
+  "status": true
+}
+```
+
+### Leave a Group (Only if the member has zero balance)
+**Endpoint:** `POST /group/leave`
+**Headers:**
+```Authorization: Bearer <jwt_token>```
+**Request Body:**
+```json
+{
+  "groupId": "000001"
+}
+```
+**Response:**```json
+{
+  "message": "Left group successfully",
+  "status": true
+}
 ```

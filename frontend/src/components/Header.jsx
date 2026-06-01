@@ -1,6 +1,7 @@
 // Header.jsx
 import React, { useState } from "react";
 import { Bell, ChevronDown, ChevronUp } from "lucide-react";
+import logo from "../assets/logo.png";
 
 import ProfilePopup from "./ProfilePopup";
 const Header = () => {
@@ -10,7 +11,8 @@ const Header = () => {
       {/* Left Section */}
       <div>
         <h1 className="text-2xl font-bold ">
-          💰 Split<span className="text-red-500">Expense</span>
+          <img src={logo} alt="Logo" className="w-16 h-16 inline-block mr-3" />{" "}
+          Split<span className="text-red-500">Expense</span>
         </h1>
       </div>
 

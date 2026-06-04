@@ -50,9 +50,12 @@ mongoose.connect('mongodb://127.0.0.1:27017/expensedb')
 
 const userRoutes = require("./routes/user.route");
 const groupRoutes = require("./routes/group.route");
+const publicRoutes = require("./routes/public.route");
+const auth = require("./middlewares/auth");
 
-app.use("/", userRoutes);
-app.use("/group", groupRoutes);
+app.use("/public", publicRoutes);
+app.use("/user", auth, userRoutes);
+app.use("/group", auth, groupRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

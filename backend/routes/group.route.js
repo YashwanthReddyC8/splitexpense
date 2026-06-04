@@ -1,14 +1,27 @@
 const express = require("express");
-const routes = express.Router();
-const { getAllGroups,createGroup,addMember,getGroupInfo,joinGroup} = require("../controllers/group.controller");
+const router = express.Router();
+
+const {
+    getAllGroups,
+    createGroup,
+    addMember,
+    getGroupInfo,
+    joinGroup
+} = require("../controllers/group.controller");
+const txnRoutes = require("../controllers/txn.controller");
+
+// Create a group
+router.post('/create', createGroup)
+// Get Group Details
+router.get('/:groupId', getGroupInfo)
+// Add a new member to the group
+router.post('/:groupId/member', addMember)
+// Join a Group
+router.post('/:groupId/join', joinGroup)
+// Get User Groups
+router.get('/getall', getAllGroups)
+// Group Transactions
+// router.get('/txns', txnRoutes)
 
 
-const auth = require("../middlewares/auth");
-
-routes.get('/getall',auth,getAllGroups)
-routes.post('/create',auth,createGroup)
-routes.get('/:groupId',auth,getGroupInfo)
-routes.post('/:groupId/member',auth,addMember)
-routes.post('/:groupId/join',auth,joinGroup)
-
-module.exports = routes;
+module.exports = router;

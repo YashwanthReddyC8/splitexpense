@@ -1,6 +1,5 @@
 const groupModel = require("../models/group.model")
 const userModel = require("../models/user.model")
-const userController = require("./user.controller")
 
 const getAllGroups = async (req, res) => {
     try {
@@ -240,7 +239,7 @@ const getGroupInfo = async (req, res) => {
     try {
         const { groupId } = req.params;
         const groupData = await groupModel.findOne({ code: groupId });
-        if (!groupData) {
+        if (!groupData || !groupData.members.some(m => m.upi === req.user.upi)) {
             return res.json({
                 status: false,
                 message: "Group not found"

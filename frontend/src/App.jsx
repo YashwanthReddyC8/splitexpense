@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Me from "./pages/Me";
 import Dashboard from "./pages/group/Dashboard";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./route/ProtectedRoute";
@@ -12,11 +13,7 @@ import _Dashboard from "./skeletons/Dashboard";
 function App() {
   return (
     <>
-      <Toaster
-        position="top-right"
-        richColors
-        closeButton
-      />
+      <Toaster position="top-right" richColors closeButton />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -26,7 +23,7 @@ function App() {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
-              <Route path="/me" element={<Dashboard />} />
+              <Route path="/me" element={<Me />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/_" element={<_Dashboard />} />
             </Route>

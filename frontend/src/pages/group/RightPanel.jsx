@@ -1,10 +1,7 @@
-import React from "react";
-import {
-    Link2,
-    Plus,
-    Send,
-} from "lucide-react";
 import { Skeleton } from 'boneyard-js/react'
+import React, { useState } from "react";
+import { Link2, Plus, Send } from "lucide-react";
+import InviteMemberModal from "../../components/InviteMemberModal";
 
 const members = [
     {
@@ -62,17 +59,14 @@ function generateColor(str) {
         hash |= 0; // Convert to 32-bit integer
     }
 
-    const color = `#${(hash >>> 0)
-        .toString(16)
-        .padStart(8, "0")
-        .slice(0, 6)}`;
+    const color = `#${(hash >>> 0).toString(16).padStart(8, "0").slice(0, 6)}`;
     console.log(str, color);
     return color;
 }
 
 function RightPanel({ userData, grpname, loading }) {
     console.log(userData);
-
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
     return (
         <section className="flex-1 min-w-0 bg-white border border-gray-200 rounded-2xl shadow-[0_14px_36px_rgba(15,23,42,0.08)] p-4 md:p-5 flex flex-col">
             <div className="flex items-center justify-between gap-4 border-b border-gray-200 pb-4">
@@ -140,19 +134,33 @@ function RightPanel({ userData, grpname, loading }) {
                                     </>)}
                             </div>
                         ))}
-                        <div className="flex items-center gap-3 border-b border-gray-200 py-4" >
-                            <div className={`flex h-12 w-12 items-center justify-center rounded-full text-base font-semibold border border-gray-300`}>
+                        <div
+                            onClick={() => setIsInviteModalOpen(true)}
+                            className="flex items-center gap-3 border-b border-gray-200 py-4 cursor-pointer"
+                        >
+                            <div
+                                className={`flex h-12 w-12 items-center justify-center rounded-full text-base font-semibold border border-gray-300`}
+                            >
                                 <Link2 size={16} />
                             </div>
 
                             <div className="min-w-0 flex-1 flex-col items-center">
-                                <p className="truncate text-base font-semibold text-gray-900">Invite Member</p>
-                                <small className="text-xs text-gray-500">Share invite link or add a new member</small>
+                                <p className="truncate text-base font-semibold text-gray-900">
+                                    Invite Member
+                                </p>
+                                <small className="text-xs text-gray-500">
+                                    Share invite link or add a new member
+                                </small>
                             </div>
                         </div>
                     </div>
                 </div>
             </Skeleton>
+            <InviteMemberModal
+                show={isInviteModalOpen}
+                onClose={() => setIsInviteModalOpen(false)}
+                groupCode={userData?.groupCode}
+            />
         </section>
     );
 }
